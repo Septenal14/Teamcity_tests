@@ -1,5 +1,6 @@
 import requests
 import logging
+from enums.status_codes import StatusCodes
 
 
 class CustomRequester:
@@ -8,10 +9,12 @@ class CustomRequester:
         self.session.headers.update({"Content-Type": "application/json", "Accept": "application/json"})
         self.base_url = base_url
 
-    def send_request(self, method, endpoint, data=None):
+    def send_request(self, method, endpoint, data=None, expected_status=StatusCodes.SC_OK, **kwargs):
         url = f"{self.base_url}{endpoint}"
         response = self.session.request(method, url, json=data)
-        response.raise_for_status()
+
+        if response.status_code != expected_status:
+            raise ValueError(f"Unexpected status code: {response.status_code}")
         return response
 
     def log_response(self, response):
