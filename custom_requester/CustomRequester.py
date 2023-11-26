@@ -18,8 +18,11 @@ class CustomRequester:
             # Define log format
             log_format = logging.Formatter('%(asctime)s [%(levelname)s] %(message)s')
 
-            # File handler
-            log_file = os.path.join('logs', 'requester.log')
+            # Получите абсолютный путь к директории, где находится CustomRequester.py
+            current_directory = os.path.dirname(os.path.abspath(__file__))
+
+            # Определите абсолютный путь к лог-файлу
+            log_file = os.path.join(current_directory, 'logs', 'requester.log')
             file_handler = RotatingFileHandler(log_file, maxBytes=1024 * 1024 * 5, backupCount=5)
             file_handler.setFormatter(log_format)
 

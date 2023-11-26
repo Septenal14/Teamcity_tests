@@ -4,7 +4,7 @@ from data.project_data import ProjectData
 
 
 class TestProjectCreate:
-    project_data = None                                     # аннотация, что переменная пока неизвестна
+    project_data = None
 
     @classmethod
     def setup_class(cls):
