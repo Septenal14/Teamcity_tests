@@ -1,0 +1,15 @@
+### Get projects
+GET http://admin:admin@localhost:8111/app/rest/projects
+Accept: application/json
+
+### Get builds
+GET http://admin:admin@localhost:8111/app/rest/builds
+Accept: application/json
+
+### Get VCS root
+GET http://admin:admin@localhost:8111/app/rest/vcs-roots
+Accept: application/json
+
+### Get Build Config
+GET http://admin:admin@localhost:8111/app/rest/buildTypes/id:SpringCoreForQa_Build
+Accept: application/json
