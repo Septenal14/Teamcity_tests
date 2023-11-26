@@ -1,29 +1,22 @@
 from api.auth_api import AuthAPI
 from api.project_api import ProjectAPI
-from api.vcs_root_api import VCSRootAPI
-from api.build_api import BuildAPI
 from data.project_data import ProjectData
-from data.vcs_root_data import VCSRootData
-from data.build_config_data import BuildConfigData
 
 
-def test_teamcity_build_process():
-    # Аутентификация и получение CSRF токена, создание сессии
-    auth_api = AuthAPI()
+class TestProjectCreate:
+    project_data = None
 
-    # Получение данных для теста
-    project_data = ProjectData.create_project()
-    project_id = project_data["id"]  # Сохраняем project_id
-    project_name = project_data["name"]  # Сохраняем project_name
-    # Создание проекта
-    project_api = ProjectAPI(auth_api)
-    project_response = project_api.create_project(project_data)
-    response_data = project_response.json()
-    assert response_data['id'] == project_id
-    assert response_data['name'] == project_name
-    assert response_data['parentProjectId'] == "_Root"
+    @classmethod
+    def setup_class(cls):
+        cls.project_data = ProjectData.create_project()
+        cls.created_project_id = cls.project_data["id"]
 
-    # project_found, error_message = project_api.is_project_in_list()
-    # assert project_found, error_message
+    def test_project_create(self):
+        auth_api = AuthAPI()
+        project_api = ProjectAPI(auth_api)
 
-
+        create_project_response = project_api.create_project(self.project_data).json()
+        assert create_project_response.get("id", {}) == self.created_project_id
+        get_projects_response = project_api.get_project(self).json()
+        project_ids = [project['id'] for project in get_projects_response['project']]
+        assert self.created_project_id in project_ids, "Созданный проект не найден в списке проектов"
