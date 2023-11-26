@@ -23,3 +23,7 @@ def test_teamcity_build_process():
     assert response_data['name'] == project_name
     assert response_data['parentProjectId'] == "_Root"
 
+    # project_found, error_message = project_api.is_project_in_list()
+    # assert project_found, error_message
+
+
