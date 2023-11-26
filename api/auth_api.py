@@ -3,12 +3,13 @@ from custom_requester.CustomRequester import CustomRequester
 
 class AuthAPI(CustomRequester):
     def __init__(self, base_url):
-        auth_credentials = ("admin", "admin")  # Эти данные могут быть загружены из конфига или переменных окружения
-        super().__init__(base_url, auth_credentials)
-        self.csrf_token = self.get_csrf_token()
+        super().__init__(base_url)
+        self.authenticate_and_get_csrf()
 
-    def get_csrf_token(self):
-        response = self.send_request("GET", "/authenticationTest.html?csrf")
-        csrf_token = response.text
+    def authenticate_and_get_csrf(self):
+        # Шаг 1: Аутентификация с базовыми учетными данными
+        self.session.auth = ("admin", "admin")  # Учетные данные администратора, при желании можно вынести в переменные окружения
+        # Шаг 2: Получение CSRF токена
+        csrf_token = self.send_request("GET", "/authenticationTest.html?csrf").text
+        # Шаг 3: Обновление заголовков сессии
         self.session.headers.update({"X-TC-CSRF-Token": csrf_token})
-        return csrf_token

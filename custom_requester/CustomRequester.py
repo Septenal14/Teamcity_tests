@@ -3,25 +3,16 @@ import logging
 
 
 class CustomRequester:
-    def __init__(self, base_url, auth_credentials):
-        self.base_url = base_url
-        self.auth_credentials = auth_credentials
+    def __init__(self, base_url):
         self.session = requests.Session()
         self.session.headers.update({"Content-Type": "application/json", "Accept": "application/json"})
+        self.base_url = base_url
 
-    def get_csrf_token(self):
-        response = self.send_request("GET", "/authenticationTest.html?csrf")
-        self.session.headers.update({"X-TC-CSRF-Token": response.text})
-        return response.text
-
-    def send_request(self, method, endpoint, data=None, headers=None):
+    def send_request(self, method, endpoint, data=None):
         url = f"{self.base_url}{endpoint}"
-        if headers is None:
-            headers = {}
-        response = self.session.request(method, url, auth=self.auth_credentials, json=data, headers=headers)
+        response = self.session.request(method, url, json=data)
         response.raise_for_status()
         return response
-
 
     def log_response(self, response):
         # Логирование запроса и ответа
