@@ -1,5 +1,7 @@
 import requests
 import logging
+from logging.handlers import RotatingFileHandler
+import os
 from enums.status_codes import StatusCodes
 
 
@@ -9,24 +11,43 @@ class CustomRequester:
         self.session.headers.update({"Content-Type": "application/json", "Accept": "application/json"})
         self.base_url = base_url
 
+        self.logger = logging.getLogger(__name__)
+        if not self.logger.handlers:
+            self.logger.setLevel(logging.INFO)
+
+            # Define log format
+            log_format = logging.Formatter('%(asctime)s [%(levelname)s] %(message)s')
+
+            # File handler
+            log_file = os.path.join('logs', 'requester.log')
+            file_handler = RotatingFileHandler(log_file, maxBytes=1024 * 1024 * 5, backupCount=5)
+            file_handler.setFormatter(log_format)
+
+            # Console handler
+            console_handler = logging.StreamHandler()
+            console_handler.setFormatter(log_format)
+
+            # Add handlers to logger
+            self.logger.addHandler(file_handler)
+            self.logger.addHandler(console_handler)
+
     def send_request(self, method, endpoint, data=None, expected_status=StatusCodes.SC_OK, **kwargs):
         url = f"{self.base_url}{endpoint}"
+        self.logger.info(f"Sending {method} request to {url}\nHeaders: {self.session.headers}\nBody: {data}")
         response = self.session.request(method, url, json=data)
 
+        # Determine how to parse the response
+        if 'application/json' in response.headers.get('Content-Type', ''):
+            response_data = response.json()
+        else:
+            response_data = response.text
+
+        # Log response details
+        self.logger.info(
+            f"Response from {url}: {response.status_code}\nHeaders: {response.headers}\nBody: {response_data}")
+
+        # Check for expected status code
         if response.status_code != expected_status:
             raise ValueError(f"Unexpected status code: {response.status_code}")
+
         return response
-
-    def log_response(self, response):
-        # Логирование запроса и ответа
-        request = response.request
-        request_headers = "\n".join([f"{header}: {value}" for header, value in request.headers.items()])
-        response_headers = "\n".join([f"{header}: {value}" for header, value in response.headers.items()])
-
-        self.logger.info(f"Request: {request.method} {request.url}\nHeaders:\n{request_headers}")
-        if request.body:
-            self.logger.info(f"Body: {request.body}")
-
-        self.logger.info(f"Response: {response.status_code}\nHeaders:\n{response_headers}")
-        if response.text:
-            self.logger.info(f"Body: {response.text}")

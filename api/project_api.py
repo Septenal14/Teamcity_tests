@@ -3,6 +3,7 @@ from custom_requester.CustomRequester import CustomRequester
 
 class ProjectAPI(CustomRequester):
     def __init__(self, requester):
+        super().__init__(requester.base_url)
         self.requester = requester
         self.base_url = requester.base_url
         self.session = requester.session
