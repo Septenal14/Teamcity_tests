@@ -7,14 +7,14 @@ Accept: application/json
 POST http://admin:admin@localhost:8111/app/rest/projects
 Content-Type: application/json
 Accept: application/json
-X-TC-CSRF-Token: 2c61747e-bc5f-4f02-bacd-8bc80c5c89d7
+X-TC-CSRF-Token: 082a3bb0-c5a5-425e-af35-4def3c2038ca
 
 {
     "parentProject": {
         "locator": "_Root"
     },
-    "name": "test project",
-    "id": "testprojectId",
+    "name": "second",
+    "id": "8c666bd8-e245-43b9-9bc4-7b2ac2594a11",
     "copyAllAssociatedSettings": true
 }
 

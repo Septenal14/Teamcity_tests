@@ -13,19 +13,17 @@ def test_teamcity_build_process():
 
     # Получение данных для теста
     project_data = ProjectData.create_project()
-    vcs_root_data = VCSRootData.create_vcs_root(project_data["id"])
-    build_config_data = BuildConfigData.create_build_config(project_data["id"])
-
+    project_id = project_data["id"]  # Сохраняем project_id
+    project_name = project_data["name"]  # Сохраняем project_name
     # Создание проекта
     project_api = ProjectAPI(auth_api)
     project_response = project_api.create_project(project_data)
+    response_data = project_response.json()
+    assert response_data['id'] == project_id
+    assert response_data['name'] == project_name
+    assert response_data['parentProjectId'] == "_Root"
 
-    # Создание VCS Root
-    vcs_root_api = VCSRootAPI(auth_api)
-    vcs_root_response = vcs_root_api.create_vcs_root(vcs_root_data)
+    # project_found, error_message = project_api.is_project_in_list()
+    # assert project_found, error_message
 
-    # Создание конфигурации сборки
-    build_api = BuildAPI(auth_api)
-    build_config_response = build_api.create_build_configuration(build_config_data)
 
-    # Здесь можно добавить дополнительные шаги и проверки, если требуется
