@@ -1,9 +1,10 @@
 from custom_requester.CustomRequester import CustomRequester
+from enums.hosts import BASE_URL
 
 
 class AuthAPI(CustomRequester):
-    def __init__(self, base_url):
-        super().__init__(base_url)
+    def __init__(self):
+        super().__init__(BASE_URL)
         self.authenticate_and_get_csrf()
 
     def authenticate_and_get_csrf(self):
