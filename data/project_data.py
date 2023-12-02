@@ -1,4 +1,4 @@
-from utils.faker import DataGenerator
+from utils.custom_faker import DataGenerator
 
 
 class ProjectData:
@@ -6,7 +6,7 @@ class ProjectData:
     def create_project():
         return {
             "parentProject": {"locator": "_Root"},
-            "name": DataGenerator.generate_project_name(),
-            "id": DataGenerator.generate_project_id(),
+            "name": DataGenerator.fake_name(),
+            "id": DataGenerator.fake_id(),
             "copyAllAssociatedSettings": True
         }
