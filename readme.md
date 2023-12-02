@@ -9,17 +9,22 @@
    ```shell
    pip install -r requirements.txt
 
-2. Создайте директорию для хранения логов по следующему пути: `custom_requester/logs`.
+2. Установите Playwright:
+
+   ```shell
+   playwright install
+
+3. Создайте директорию для хранения логов по следующему пути: `custom_requester/logs`.
 
     ```shell
     mkdir -p custom_requester/logs
 
-3. Внутри директории `custom_requester/logs` создайте пустой файл `requester.log`, в который будут сохраняться логи.
+4. Внутри директории `custom_requester/logs` создайте пустой файл `requester.log`, в который будут сохраняться логи.
 
      ```shell
     touch custom_requester/logs/requester.log
 
-4. Запустите тесты, выполнив команду:
+5. Запустите тесты, выполнив команду:
 
     ```shell
     pytest
