@@ -17,7 +17,8 @@ class ProjectCreationPageActions:
 
     def navigate(self):
         self.page.goto(
-            "http://localhost:8111/admin/createObjectMenu.html?projectId=_Root&showMode=createProjectMenu&cameFromUrl=http%3A%2F%2Flocalhost%3A8111%2Ffavorite%2Fprojects%3Fmode%3Dbuilds#createManually", wait_until="load")
+            "http://localhost:8111/admin/createObjectMenu.html?projectId=_Root&showMode=createProjectMenu&cameFromUrl=http%3A%2F%2Flocalhost%3A8111%2Ffavorite%2Fprojects%3Fmode%3Dbuilds#createManually",
+            wait_until="load")
 
     def create_project(self, project_name, project_id):
         self.locators.name_input.fill(project_name)

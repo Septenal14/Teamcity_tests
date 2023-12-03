@@ -6,11 +6,14 @@ from data.project_data import ProjectData
 from data.vcs_root_data import VCSRootData
 from data.build_config_data import BuildConfigData
 from playwright.sync_api import sync_playwright
-from pages.auth_page import LoginPageLocators
 
 
 @pytest.fixture(scope='class')
 def session():
+    """
+    Начинает сессию. Скоуп класса - одна сессия на весь тестовый класс
+    По окончанию тестов yield закроет сессию
+    """
     http_session = requests.Session()
     yield http_session
     http_session.close()
@@ -19,11 +22,6 @@ def session():
 @pytest.fixture(scope='class')
 def api_manager(session):
     return ApiManager(session)
-
-
-@pytest.fixture
-def project_data_fixture():
-    return ProjectData.create_project()
 
 
 @pytest.fixture

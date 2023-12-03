@@ -18,6 +18,11 @@ class ProjectAPI(CustomRequester):
                                  expected_status=StatusCodes.NO_CONTENT)
 
     def clean_up_project(self, created_project_id):
+        """
+        Функция клининга в тесте. Удаляет созданный проект и проверяет его отсутствии в списке проектов.
+        При юзе в UI вызывать через api_manager
+        :param created_project_id: принимает на вход созданный id_проекта который нужно удалить
+        """
         self.delete_project(created_project_id)
         get_projects_response = self.get_project().json()
 

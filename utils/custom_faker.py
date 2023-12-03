@@ -5,7 +5,9 @@ faker_instance = Faker()
 
 
 class DataGenerator:
-
+    """
+    Фейкер для генерации рандомных данных или значений
+    """
     @staticmethod
     def fake_id():
         first_letter = faker_instance.random.choice(string.ascii_letters)
