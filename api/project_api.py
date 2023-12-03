@@ -21,6 +21,6 @@ class ProjectAPI(CustomRequester):
         self.delete_project(created_project_id)
         get_projects_response = self.get_project().json()
 
-        project_ids = [project['id'] for project in get_projects_response['project']]
+        project_ids = [project.get('id', {}) for project in get_projects_response.get('project', [])]
         assert created_project_id not in project_ids, \
-            f"expected created project id={created_project_id} in project_ids, but not matched"
+            f"The expected list of IDs should not include created_project_id={created_project_id}, but it was found."

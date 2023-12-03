@@ -14,27 +14,7 @@
    ```shell
    playwright install
 
-3. Создайте директорию для хранения логов.
-
-   - **Для Mac/Linux:**
-     ```shell
-     mkdir -p custom_requester/logs
-   - **Для Windows:**
-     В командной строке PowerShell:
-     ```shell
-     mkdir custom_requester\logs
-
-4. Внутри директории `custom_requester/logs` создайте пустой файл `requester.log` для логов.
-
-   - **Для Mac/Linux:**
-     ```shell
-     touch custom_requester/logs/requester.log
-   - **Для Windows:**
-     В командной строке PowerShell:
-     ```shell
-     New-Item custom_requester\logs\requester.log -ItemType "file"
-
-5. Запустите тесты, выполнив команду:
+3. Запустите тесты, выполнив команду:
 
     ```shell
     pytest

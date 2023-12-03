@@ -15,7 +15,7 @@ class TestProjectCreate:
             f"expected project id= {self.created_project_id}, but '{create_project_response.get('id', {})}' given"
 
         get_projects_response = api_manager.project_api.get_project().json()
-        project_ids = [project['id'] for project in get_projects_response['project']]
+        project_ids = [project.get('id', {}) for project in get_projects_response.get('project', [])]
         assert self.created_project_id in project_ids, \
             f"expected created project id={self.created_project_id} in project_ids, but not matched"
 
