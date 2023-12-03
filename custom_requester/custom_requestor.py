@@ -12,7 +12,7 @@ class CustomRequester:
         self.session = session
         self.base_url = BASE_URL
 
-    def send_request(self, method, endpoint, data=None, expected_status=StatusCodes.SC_OK, need_logging=True, **kwargs):
+    def send_request(self, method, endpoint, data=None, expected_status=StatusCodes.SC_OK, need_logging=True):
         url = f"{self.base_url}{endpoint}"
         response = self.session.request(method, url, json=data)
 

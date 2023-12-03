@@ -9,7 +9,7 @@ class ProjectAPI(CustomRequester):
     def create_project(self, project_data):
         return self.send_request("POST", "/app/rest/projects", data=project_data)
 
-    def get_project(self, project_data):
+    def get_project(self):
         return self.send_request("GET", "/app/rest/projects")
 
     def delete_project(self, project_id):
@@ -19,7 +19,7 @@ class ProjectAPI(CustomRequester):
 
     def clean_up_project(self, created_project_id):
         self.delete_project(created_project_id)
-        get_projects_response = self.get_project(self).json()
+        get_projects_response = self.get_project().json()
 
         project_ids = [project['id'] for project in get_projects_response['project']]
         assert created_project_id not in project_ids, \
