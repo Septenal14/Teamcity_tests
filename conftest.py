@@ -1,10 +1,24 @@
 import pytest
+import requests
 
+from api.api_manager import ApiManager
 from data.project_data import ProjectData
 from data.vcs_root_data import VCSRootData
 from data.build_config_data import BuildConfigData
 from playwright.sync_api import sync_playwright
 from pages.auth_page import LoginPage
+
+
+@pytest.fixture(scope='class')
+def session():
+    http_session = requests.Session()
+    yield http_session
+    http_session.close()
+
+
+@pytest.fixture(scope='class')
+def api_manager(session):
+    return ApiManager(session)
 
 
 @pytest.fixture
