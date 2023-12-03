@@ -14,7 +14,7 @@ class ProjectsPageActions:
         self.locators = locators
 
     def navigate(self):
-        self.page.goto(f"{BASE_URL.BASE_URL}/favorite/projects?mode=builds", wait_until="load")
+        self.page.goto(f"{BASE_URL.BASE_URL}/favorite/projects?mode=builds")
 
     def create_new_project(self):
         self.new_project_button.click()

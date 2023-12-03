@@ -3,12 +3,19 @@ from pages.create_project_page import ProjectCreationPage, ProjectCreationPageAc
 from pages.edit_project_page import EditProjectPage, EditProjectPageActions
 from pages.favorite_project_page import FavoriteProjectsPage, FavoriteProjectsPageActions
 from utils.custom_faker import DataGenerator
+from utils.browser_setup import BrowserSetup
 
 
-def test_create_project(browser, api_manager):
-    page = browser.new_page()
+def setup_module(module):
+    global browser, page
+    browser, page = BrowserSetup.setup()
 
-    # Инициализация локаторов и действий для страницы логина
+
+def teardown_module(module):
+    BrowserSetup.teardown(browser)
+
+
+def test_create_project(api_manager):
     login_locators = LoginPageLocators(page)
     login_actions = LoginPageActions(login_locators)
     login_actions.navigate_to_login()

@@ -34,11 +34,3 @@ def vcs_root_data_fixture(project_data_fixture):
 def build_config_data_fixture():
     project_id = "testprojectId"  # Пример project_id, его можно получать динамически
     return BuildConfigData.create_build_config(project_id)
-
-
-@pytest.fixture(scope="session")
-def browser():
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
-        yield browser
-        browser.close()
