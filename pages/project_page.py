@@ -1,6 +1,5 @@
 from playwright.sync_api import Page
 from enums.hosts import BASE_URL
- # Импорт перечисления
 
 
 class ProjectsPage:
@@ -8,8 +7,14 @@ class ProjectsPage:
         self.page = page
         self.new_project_button = page.locator(".ProjectCreateSection__button--VX")
 
+
+class ProjectsPageActions:
+    def __init__(self, page: Page, locators):
+        self.page = page
+        self.locators = locators
+
     def navigate(self):
-        self.page.goto(f"{BASE_URL.BASE_URL}/favorite/projects?mode=builds")
+        self.page.goto(f"{BASE_URL.BASE_URL}/favorite/projects?mode=builds", wait_until="load")
 
     def create_new_project(self):
         self.new_project_button.click()

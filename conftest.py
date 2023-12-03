@@ -6,7 +6,7 @@ from data.project_data import ProjectData
 from data.vcs_root_data import VCSRootData
 from data.build_config_data import BuildConfigData
 from playwright.sync_api import sync_playwright
-from pages.auth_page import LoginPage
+from pages.auth_page import LoginPageLocators
 
 
 @pytest.fixture(scope='class')
@@ -42,7 +42,5 @@ def build_config_data_fixture():
 def browser():
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=False)
-        page = browser.new_page()
-        login_page = LoginPage(page)
         yield browser
         browser.close()

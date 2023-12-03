@@ -1,60 +1,31 @@
-from playwright.sync_api import sync_playwright
+from pages.auth_page import LoginPageLocators, LoginPageActions
+from pages.create_project_page import ProjectCreationPage, ProjectCreationPageActions
+from pages.edit_project_page import EditProjectPage, EditProjectPageActions
+from pages.favorite_project_page import FavoriteProjectsPage, FavoriteProjectsPageActions
+from utils.custom_faker import DataGenerator
 
-from pages.auth_page import LoginPage
-from pages.favorite_project_page import FavoriteProjectsPage
-from pages.project_page import ProjectsPage
 
-
-def test_login(browser):
+def test_create_project(browser, api_manager):
     page = browser.new_page()
-    login_page = LoginPage(page)
-    login_page.navigate()
-    login_page.login("admin", "admin")
 
-    # Ожидание загрузки страницы после входа
-    page.wait_for_load_state("networkidle")
+    # Инициализация локаторов и действий для страницы логина
+    login_locators = LoginPageLocators(page)
+    login_actions = LoginPageActions(login_locators)
+    login_actions.navigate_to_login()
+    login_actions.login("admin", "admin")
 
-    # Проверка перенаправления на нужную страницу
-    expected_url = "http://localhost:8111/favorite/projects?mode=builds"
-    assert page.url == expected_url, "Не удалось перейти на ожидаемую страницу после входа"
+    favorite_projects_locators = FavoriteProjectsPage(page)
+    favorite_projects_actions = FavoriteProjectsPageActions(page, favorite_projects_locators)
+    favorite_projects_actions.click_create_project()
 
+    create_project_locators = ProjectCreationPage(page)
+    create_project_actions = ProjectCreationPageActions(page, create_project_locators)
+    project_name = DataGenerator.fake_name()
+    project_id = DataGenerator.fake_id()
+    create_project_actions.create_project(project_name, project_id)
 
-def test_create_new_project(browser):
-    # Аутентификация
-    login_page = LoginPage(browser)
-    login_page.navigate()
-    login_page.login("admin", "admin")
+    edit_project_locators = EditProjectPage(page)
+    edit_project_actions = EditProjectPageActions(page, edit_project_locators)
+    assert edit_project_actions.verify_project_created(project_name), "Сообщение о создании проекта не соответствует ожидаемому или не отображается"
 
-    # Переход на страницу проектов и создание нового проекта
-    projects_page = ProjectsPage(browser)
-    projects_page.navigate()
-    projects_page.create_new_project()
-
-    # Проверка перехода на страницу создания проекта
-    expected_url = ProjectsPage._create_project_url()
-    assert browser.url == expected_url, "Не удалось перейти на страницу создания проекта"
-
-
-def test_create_project():
-    with sync_playwright() as p:
-        browser = p.chromium.launch()
-        page = browser.new_page()
-
-        login_page = LoginPage(page)
-        login_page.navigate()
-        login_page.login("admin", "admin")
-
-        # После успешной авторизации, переходим на страницу Favorite Projects
-        favorite_projects_page = FavoriteProjectsPage(page)
-        favorite_projects_page.navigate()
-
-        # Нажимаем на кнопку создания нового проекта
-        favorite_projects_page.click_create_project()
-
-        # Проверяем, что URL соответствует ожидаемому
-        expected_url = "http://localhost:8111/admin/createObjectMenu.html?projectId=_Root&showMode=createProjectMenu&cameFromUrl=http%3A%2F%2Flocalhost%3A8111%2Ffavorite%2Fprojects%3Fmode%3Dbuilds#createManually"
-        assert page.url == expected_url, "URL страницы не соответствует ожидаемому"
-
-        browser.close()
-
-
+    api_manager.project_api.clean_up_project(project_id)
