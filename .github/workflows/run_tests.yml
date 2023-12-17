@@ -16,7 +16,7 @@ jobs:
     - name: Run TeamCity Server Container
       run: |
         docker run -d --name teamcity-server-instance -p 8111:8111 jetbrains/teamcity-server
-        sleep 60
+        sleep 300
 
     - name: Run TeamCity Agent Container
       run: |
