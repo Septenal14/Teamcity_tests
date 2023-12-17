@@ -17,21 +17,38 @@ jobs:
       run: |
         docker run -d --name teamcity-server-instance -v ${{ github.workspace }}/logs:/opt/teamcity/logs -p 8111:8111 jetbrains/teamcity-server
         echo "Waiting for TeamCity server to start..."
-        for i in {1..60}; do
+        for i in {1..30}; do
           if docker logs teamcity-server-instance 2>&1 | grep -q 'TeamCity process PID is'; then
             echo "TeamCity server started successfully."
             break
           fi
           echo "Waiting..."
-          sleep 10
+          sleep 5
         done
+        echo "Docker Status:"
+        docker ps -a
+        echo "TeamCity Server Logs:"
+        docker logs teamcity-server-instance
+
+    - name: Check Port Availability
+      run: |
+        echo "Checking if port 8111 is open..."
+        if nc -z localhost 8111; then
+          echo "Port 8111 is open."
+        else
+          echo "Port 8111 is not open."
+        fi
 
     - name: Retrieve Super User Token
       run: |
-        docker exec teamcity-server-instance cat /data/teamcity/logs/teamcity-server.log | grep 'Super user authentication token' > superuser_token.txt
-        token=$(cat superuser_token.txt | grep -oP 'Super user authentication token: \K[0-9]+')
-        echo "Super user token: $token"
-        echo "SUPER_USER_TOKEN=$token" >> $GITHUB_ENV
+        if docker exec teamcity-server-instance cat /data/teamcity/logs/teamcity-server.log 2>&1 | grep 'Super user authentication token' > superuser_token.txt; then
+          token=$(cat superuser_token.txt | grep -oP 'Super user authentication token: \K[0-9]+')
+          echo "Super user token: $token"
+          echo "SUPER_USER_TOKEN=$token" >> $GITHUB_ENV
+        else
+          echo "Failed to retrieve super user token. Printing log for diagnosis:"
+          docker logs teamcity-server-instance
+        fi
 
     - name: Run TeamCity Agent Container
       run: |
