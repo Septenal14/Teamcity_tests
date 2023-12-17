@@ -3,3 +3,5 @@ custom_requester/logs/
 __pycache__/
 *.py[cod]
 .idea/
+results/
+.env

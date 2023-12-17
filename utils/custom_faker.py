@@ -9,12 +9,14 @@ class DataGenerator:
     Фейкер для генерации рандомных данных или значений
     """
     @staticmethod
-    def fake_id():
+    def fake_project_id():
         first_letter = faker_instance.random.choice(string.ascii_letters)
-        rest_characters = ''.join(faker_instance.random.choices(string.ascii_letters + string.digits + '_', k=10))
+        rest_characters = ''.join(faker_instance.random.choices(string.ascii_letters + string.digits, k=10))
         project_id = first_letter + rest_characters
         return project_id
 
     @staticmethod
     def fake_name():
         return faker_instance.word()  # or any other suitable Faker method for name generation
+
+    print(fake_project_id())

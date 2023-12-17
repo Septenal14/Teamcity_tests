@@ -5,7 +5,6 @@ from api.api_manager import ApiManager
 from data.project_data import ProjectData
 from data.vcs_root_data import VCSRootData
 from data.build_config_data import BuildConfigData
-from playwright.sync_api import sync_playwright
 
 
 @pytest.fixture(scope='class')
@@ -34,3 +33,10 @@ def vcs_root_data_fixture(project_data_fixture):
 def build_config_data_fixture():
     project_id = "testprojectId"  # Пример project_id, его можно получать динамически
     return BuildConfigData.create_build_config(project_id)
+
+
+@pytest.fixture
+def project_invalid_id_data():
+    def _project_invalid_id_data(project_invalid_id):
+        return ProjectData.create_project_data_negative(project_invalid_id)
+    return _project_invalid_id_data

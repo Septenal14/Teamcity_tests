@@ -6,8 +6,11 @@ class ProjectAPI(CustomRequester):
     def __init__(self, session):
         super().__init__(session)
 
-    def create_project(self, project_data):
-        return self.send_request("POST", "/app/rest/projects", data=project_data)
+    def create_project(self, project_data, expected_status=StatusCodes.SC_OK):
+        return self.send_request("POST",
+                                 "/app/rest/projects",
+                                 data=project_data,
+                                 expected_status=expected_status)
 
     def get_project(self):
         return self.send_request("GET", "/app/rest/projects")
