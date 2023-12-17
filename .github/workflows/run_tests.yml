@@ -24,7 +24,7 @@ jobs:
     - name: Install Python and Playwright
       run: |
         sudo apt-get update
-        sudo apt-get install -y python3 python3-pip
+        sudo apt-get install -y python3.10 python3-pip
         pip install playwright pytest
 
     - name: Run Tests
