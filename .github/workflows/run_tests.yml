@@ -21,4 +21,4 @@ jobs:
 
     - name: Run Tests
       run: |
-        bash infra_setup.bash
+        bash infra/infra_setup.bash
