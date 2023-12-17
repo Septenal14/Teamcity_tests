@@ -21,12 +21,11 @@ jobs:
       run: |
         docker run -d --name teamcity-agent-instance -e SERVER_URL="http://localhost:8111" jetbrains/teamcity-agent
 
-    - name: Install Python and Playwright
+    - name: Install Python Dependencies
       run: |
         sudo apt-get update
         sudo apt-get install -y python3.10 python3-pip
-        pip install playwright pytest
-        pip install playwright pytest faker
+        pip install -r requirements.txt
 
     - name: Run Tests
       run: |
