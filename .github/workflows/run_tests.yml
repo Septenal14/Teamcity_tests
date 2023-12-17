@@ -15,7 +15,7 @@ jobs:
 
     - name: Run TeamCity Server Container
       run: |
-        docker run -d --name teamcity-server-instance -p 8111:8111 jetbrains/teamcity-server
+        docker run -d --name teamcity-server-instance -v ${{ github.workspace }}/logs:/opt/teamcity/logs -p 8111:8111 jetbrains/teamcity-server
         sleep 60
 
     - name: Retrieve Super User Token
