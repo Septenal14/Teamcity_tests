@@ -16,7 +16,15 @@ jobs:
     - name: Run TeamCity Server Container
       run: |
         docker run -d --name teamcity-server-instance -v ${{ github.workspace }}/logs:/opt/teamcity/logs -p 8111:8111 jetbrains/teamcity-server
-        sleep 300
+        echo "Waiting for TeamCity server to start..."
+        for i in {1..60}; do
+          if docker logs teamcity-server-instance 2>&1 | grep -q 'TeamCity process PID is'; then
+            echo "TeamCity server started successfully."
+            break
+          fi
+          echo "Waiting..."
+          sleep 10
+        done
 
     - name: Retrieve Super User Token
       run: |
