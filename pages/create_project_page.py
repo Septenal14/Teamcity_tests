@@ -1,17 +1,17 @@
 from playwright.sync_api import Page
-
+from elements.creating_page_elements import InputElement, ButtonElement
 
 class ProjectCreationPage:
 
     def __init__(self, page: Page):
         self.page = page
-        self.name_input = page.locator("input[name='name']")
-        self.id_input = page.locator("#externalId")
-        self.create_button = page.locator("#createProject")
+        self.name_input = InputElement(page.locator("input[name='name']"))
+        self.id_input = InputElement(page.locator("#externalId"))
+        self.create_button = ButtonElement(page.locator("#createProject"))
 
 
 class ProjectCreationPageActions:
-    def __init__(self, page: Page, locators):
+    def __init__(self, page: Page, locators: ProjectCreationPage):
         self.page = page
         self.locators = locators
 
@@ -21,6 +21,6 @@ class ProjectCreationPageActions:
             wait_until="load")
 
     def create_project(self, project_name, project_id):
-        self.locators.name_input.fill(project_name)
-        self.locators.id_input.fill(project_id)
+        self.locators.name_input.clear_and_fill(project_name)
+        self.locators.id_input.clear_and_fill(project_id)
         self.locators.create_button.click()
