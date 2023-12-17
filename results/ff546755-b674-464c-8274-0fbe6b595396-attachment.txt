@@ -1,0 +1,29 @@
+2023-12-16 19:00:09 [32mINFO[0m [32mpytest test/frontend/test_create_project.py::test_create_project (setup)[0m
+curl -X GET 'http://localhost:8111/authenticationTest.html?csrf' \
+-H 'User-Agent: python-requests/2.31.0' \
+-H 'Accept-Encoding: gzip, deflate' \
+-H 'Accept: */*' \
+-H 'Connection: keep-alive' \
+-H 'Authorization: Basic YWRtaW46YWRtaW4=' \
+2023-12-16 19:00:13 [32mINFO[0m [32mpytest test/frontend/test_create_project.py::test_create_project[0m
+curl -X DELETE 'http://localhost:8111/app/rest/projects/id:RNpWg2CbikO' \
+-H 'User-Agent: python-requests/2.31.0' \
+-H 'Accept-Encoding: gzip, deflate' \
+-H 'Accept: application/json' \
+-H 'Connection: keep-alive' \
+-H 'Content-Type: application/json' \
+-H 'X-TC-CSRF-Token: 03ac48fd-ee22-48bb-b436-04883c0517ca' \
+-H 'Cookie: RecentLogin=; TCSESSIONID=BEC80A415F0ADD195631F336248DAF03' \
+-H 'Content-Length: 0' \
+-H 'Authorization: Basic YWRtaW46YWRtaW4=' \
+
+2023-12-16 19:00:13 [32mINFO[0m [32mpytest test/frontend/test_create_project.py::test_create_project[0m
+curl -X GET 'http://localhost:8111/app/rest/projects' \
+-H 'User-Agent: python-requests/2.31.0' \
+-H 'Accept-Encoding: gzip, deflate' \
+-H 'Accept: application/json' \
+-H 'Connection: keep-alive' \
+-H 'Content-Type: application/json' \
+-H 'X-TC-CSRF-Token: 03ac48fd-ee22-48bb-b436-04883c0517ca' \
+-H 'Cookie: RecentLogin=; TCSESSIONID=BEC80A415F0ADD195631F336248DAF03' \
+-H 'Authorization: Basic YWRtaW46YWRtaW4=' \

@@ -1,0 +1,18 @@
+2023-12-16 19:00:05 [32mINFO[0m [32mpytest test/backend/test_create_project_api.py::TestProjectCreate::test_project_create_negative[1-\u041f\u0435\u0440\u0432\u044b\u0439 \u0441\u0438\u043c\u0432\u043e\u043b \u043d\u0435 ascii-starts with non-letter character][0m
+curl -X POST 'http://localhost:8111/app/rest/projects' \
+-H 'User-Agent: python-requests/2.31.0' \
+-H 'Accept-Encoding: gzip, deflate' \
+-H 'Accept: application/json' \
+-H 'Connection: keep-alive' \
+-H 'Content-Type: application/json' \
+-H 'X-TC-CSRF-Token: def4235c-3b5f-46be-a2a0-01af0217d617' \
+-H 'Cookie: RecentLogin=; TCSESSIONID=E1D5C78437FE819098489936727A3540' \
+-H 'Content-Length: 100' \
+-H 'Authorization: Basic YWRtaW46YWRtaW4=' \
+-d '{"parentProject": {"locator": "_Root"}, "name": "scene", "id": 1, "copyAllAssociatedSettings": true}' 
+
+2023-12-16 19:00:05 [32mINFO[0m 	RESPONSE:
+STATUS_CODE: [31m500[0m
+DATA: [31mError has occurred during request processing, status code: 500 (Internal Server Error).
+Details: jetbrains.buildServer.serverSide.InvalidIdentifierException: Project ID "1" is invalid: starts with non-letter character '1'. ID should start with a latin letter and contain only latin letters, digits and underscores (at most 225 characters).
+Error occurred while processing this request.[0m

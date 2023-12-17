@@ -1,0 +1,12 @@
+2023-12-17 11:42:39 [32mINFO[0m [32mpytest test/backend/test_create_project_api.py::TestProjectCreate::test_project_create (setup)[0m
+curl -X GET 'http://localhost:8111/authenticationTest.html?csrf' \
+-H 'User-Agent: python-requests/2.31.0' \
+-H 'Accept-Encoding: gzip, deflate' \
+-H 'Accept: */*' \
+-H 'Connection: keep-alive' \
+-H 'Authorization: Basic VXNlckNyZWRzLkVNQUlMOlVzZXJDcmVkcy5FTUFJTA==' \
+
+2023-12-17 11:42:39 [32mINFO[0m 	RESPONSE:
+STATUS_CODE: [31m401[0m
+DATA: [31mIncorrect username or password.
+To login manually go to "/login.html" page[0m
