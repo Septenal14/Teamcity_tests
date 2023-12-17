@@ -26,6 +26,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y python3.10 python3-pip
         pip install playwright pytest
+        pip install playwright pytest faker
 
     - name: Run Tests
       run: |
