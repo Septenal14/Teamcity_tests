@@ -13,6 +13,11 @@ jobs:
     - name: Set up Docker
       uses: docker/setup-buildx-action@v1
 
+    - name: Prepare Logs Directory
+      run: |
+        mkdir -p ./logs
+        sudo chown -R 1000:1000 ./logs
+
     - name: Run TeamCity Server Container
       run: |
         docker run -d --name teamcity-server-instance -v ${{ github.workspace }}/logs:/opt/teamcity/logs -p 8111:8111 jetbrains/teamcity-server
