@@ -8,8 +8,9 @@ class BrowserSetup:
         browser = playwright.chromium.launch(headless=False)
         page = browser.new_page()
         page.set_viewport_size({"width": 1920, "height": 1080})
-        return browser, page
+        return playwright, browser, page
 
     @classmethod
-    def teardown(cls, browser):
+    def teardown(cls, playwright, browser):
         browser.close()
+        playwright.stop()

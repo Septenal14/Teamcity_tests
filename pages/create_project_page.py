@@ -1,6 +1,7 @@
 from playwright.sync_api import Page
 from elements.creating_page_elements import InputElement, ButtonElement
 
+
 class ProjectCreationPage:
 
     def __init__(self, page: Page):

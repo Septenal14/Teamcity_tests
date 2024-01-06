@@ -65,10 +65,14 @@ jobs:
         sudo apt-get install -y python3.10 python3-pip
         pip install -r requirements.txt
 
-    - name: Run Tests
+    - name: Run Set Up Test
       run: |
         playwright install
-        pytest -v --alluredir=results
+        pytest -v test_set_up.py --alluredir=results
+
+    - name: Run Tests
+      run: |
+        pytest -v --alluredir=results --ignore=test_set_up.py
 
     - name: Start Allure Report
       run: |
