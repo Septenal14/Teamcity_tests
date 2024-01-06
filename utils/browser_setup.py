@@ -5,7 +5,7 @@ class BrowserSetup:
     @classmethod
     def setup(cls):
         playwright = sync_playwright().start()
-        browser = playwright.chromium.launch(headless=False)
+        browser = playwright.chromium.launch(headless=True)
         page = browser.new_page()
         page.set_viewport_size({"width": 1920, "height": 1080})
         return playwright, browser, page

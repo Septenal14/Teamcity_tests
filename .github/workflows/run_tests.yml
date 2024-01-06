@@ -68,11 +68,11 @@ jobs:
     - name: Run Set Up Test
       run: |
         playwright install
-        pytest -v test_set_up.py --alluredir=results
+        pytest -v test/frontend/test_set_up.py --alluredir=results
 
     - name: Run Tests
       run: |
-        pytest -v --alluredir=results --ignore=test_set_up.py
+        pytest -v --alluredir=results --ignore=test/frontend/test_set_up.py
 
     - name: Start Allure Report
       run: |
