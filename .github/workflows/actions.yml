@@ -1,10 +1,12 @@
-name: Run System Tests
+
+name: CI
 
 on:
   push:
     branches: [ "main", "final-version", "Configure-CI" ]
   pull_request:
     branches: [ "main", "final-version", "Configure-CI" ]
+  workflow_dispatch:
 
 jobs:
   run-tests:
@@ -30,3 +32,21 @@ jobs:
     - name: Run Tests
       run: |
             pytest -v --ignore=test/frontend/test_set_up.py
+
+
+    services:
+      teamcity-server-instance:
+        image: jetbrains/teamcity-server
+        ports:
+          - 8111:8111
+        volumes:
+          - /tmp/build/volume/teamcity-server-logs:/opt/teamcity/logs
+          - /tmp/build/volume/teamcity-server-data:/data/teamcity_server/datadir
+        options: >-
+          --name teamcity-server
+      teamcity-agent-instance:
+        image: jetbrains/teamcity-agent
+        env:
+          SERVER_URL: http://teamcity-server:8111
+        options: >-
+          --name teamcity-agent
