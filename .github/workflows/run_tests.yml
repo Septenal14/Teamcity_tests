@@ -9,7 +9,7 @@ on:
 jobs:
   run-tests:
     runs-on: ubuntu-latest
-    needs: setup-env
+    needs: build
 
     steps:
     - name: Checkout repository
