@@ -1,6 +1,11 @@
 name: System tests
 
-on: push
+on:
+  push:
+    branches: [ "main", "final-version", "Configure-CI" ]
+  pull_request:
+    branches: [ "main", "final-version", "Configure-CI" ]
+  workflow_dispatch:
 
 jobs:
   build:

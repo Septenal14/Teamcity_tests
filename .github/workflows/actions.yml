@@ -16,7 +16,6 @@ jobs:
     - name: Verify services
       run: |
             ls -la /tmp/build/volume/teamcity-server-logs/
-            ls -la /tmp/build/volume/selenoid-config/
             ls -la ${{ github.workspace }}
     - name: Install Python Dependencies
       run: |
