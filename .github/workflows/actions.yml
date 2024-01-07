@@ -26,6 +26,28 @@ jobs:
             -v $(pwd)/logs:/opt/teamcity/logs \
             -p 8111:8111 \
             jetbrains/teamcity-server
+        echo "Waiting for TeamCity server to start..."
+        for i in {1..30}; do
+          if docker logs teamcity-server-instance 2>&1 | grep -q 'TeamCity process PID is'; then
+            echo "TeamCity server started successfully."
+            break
+          fi
+          echo "Waiting..."
+          sleep 5
+        done
+        echo "Docker Status:"
+        docker ps -a
+        echo "TeamCity Server Logs:"
+        docker logs teamcity-server-instance
+
+    - name: Check Port Availability
+      run: |
+        echo "Checking if port 8111 is open..."
+        if nc -z localhost 8111; then
+          echo "Port 8111 is open."
+        else
+          echo "Port 8111 is not open."
+        fi
 
     - name: Run TeamCity Agent Container
       run: |
