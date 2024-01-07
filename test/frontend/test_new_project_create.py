@@ -1,6 +1,6 @@
 import allure
-from pages.update_create_project_page import ProjectCreationPage
-from pages.update_login_page import LoginPage
+from pages.create_project_page import ProjectCreationPage
+from pages.login_page import LoginPage
 import time
 
 
