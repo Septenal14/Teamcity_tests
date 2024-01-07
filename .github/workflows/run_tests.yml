@@ -9,23 +9,24 @@ on:
 jobs:
   run-tests:
     runs-on: ubuntu-latest
-    needs: build
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
+    - uses: actions/checkout@v4
+    - name: Verify services
+      run: |
+            ls -la /tmp/build/volume/teamcity-server-logs/
+            ls -la /tmp/build/volume/selenoid-config/
+            ls -la ${{ github.workspace }}
     - name: Install Python Dependencies
       run: |
-        sudo apt-get update
-        sudo apt-get install -y python3.10 python3-pip
-        pip install -r requirements.txt
+            sudo apt-get update
+            sudo apt-get install -y python3.10 python3-pip
+            pip install -r requirements.txt
 
     - name: Run Set Up Test
       run: |
-        playwright install
-        pytest -v test/frontend/test_set_up.py
+            playwright install
+            pytest -v test/frontend/test_set_up.py
 
     - name: Run Tests
       run: |
-        pytest -v --ignore=test/frontend/test_set_up.py
+            pytest -v --ignore=test/frontend/test_set_up.py
