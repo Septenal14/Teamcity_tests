@@ -17,6 +17,18 @@ jobs:
       run: |
             ls -la /tmp/build/volume/teamcity-server-logs/
             ls -la ${{ github.workspace }}
+
+    - name: Wait for Server to be Ready
+      run: sleep 30
+
+    - name: Check Port Availability
+      run: |
+            while ! nc -z localhost 8111; do   
+              echo "Waiting for server to start..."
+              sleep 5
+            done
+        
+
     - name: Install Python Dependencies
       run: |
             sudo apt-get update
