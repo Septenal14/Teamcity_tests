@@ -9,6 +9,7 @@ class InputElement:
         self.locator.fill("")  # Очищаем поле
         self.locator.fill(text)  # Заполняем новым текстом
 
+
 class ButtonElement:
     def __init__(self, locator):
         self.locator = locator

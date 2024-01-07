@@ -5,6 +5,15 @@ from api.api_manager import ApiManager
 from data.project_data import ProjectData
 from data.vcs_root_data import VCSRootData
 from data.build_config_data import BuildConfigData
+from utils.custom_faker import DataGenerator
+from utils.browser_setup import BrowserSetup
+
+
+@pytest.fixture(scope="function")
+def browser():
+    playwright, browser_instance, page = BrowserSetup.setup()
+    yield page
+    BrowserSetup.teardown(playwright, browser_instance)
 
 
 @pytest.fixture(scope='class')
@@ -40,3 +49,13 @@ def project_invalid_id_data():
     def _project_invalid_id_data(project_invalid_id):
         return ProjectData.create_project_data_negative(project_invalid_id)
     return _project_invalid_id_data
+
+
+@pytest.fixture
+def random_name():
+    return DataGenerator.fake_name()
+
+
+@pytest.fixture
+def random_project_id():
+    return DataGenerator.fake_project_id()
