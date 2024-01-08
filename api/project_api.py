@@ -3,8 +3,6 @@ from enums.status_codes import StatusCodes
 
 
 class ProjectAPI(CustomRequester):
-    def __init__(self, session):
-        super().__init__(session)
 
     def create_project(self, project_data, expected_status=StatusCodes.SC_OK):
         return self.send_request("POST",
