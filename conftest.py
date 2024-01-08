@@ -3,8 +3,6 @@ import requests
 
 from api.api_manager import ApiManager
 from data.project_data import ProjectData
-from data.vcs_root_data import VCSRootData
-from data.build_config_data import BuildConfigData
 from utils.custom_faker import DataGenerator
 from utils.browser_setup import BrowserSetup
 
@@ -30,18 +28,6 @@ def session():
 @pytest.fixture(scope='class')
 def api_manager(session):
     return ApiManager(session)
-
-
-@pytest.fixture
-def vcs_root_data_fixture(project_data_fixture):
-    project_id = project_data_fixture["id"]
-    return VCSRootData.create_vcs_root(project_id)
-
-
-@pytest.fixture
-def build_config_data_fixture():
-    project_id = "testprojectId"  # Пример project_id, его можно получать динамически
-    return BuildConfigData.create_build_config(project_id)
 
 
 @pytest.fixture
