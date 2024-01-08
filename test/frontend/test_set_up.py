@@ -1,6 +1,7 @@
 import allure
 from pages.setup_page import SetUpPage
 
+
 @allure.title("Сетап сервера")
 @allure.description("Сетапим проект принимая пользовательское соглашение, инициализируя БД и создавая админ юзера")
 def test_set_up(browser):
