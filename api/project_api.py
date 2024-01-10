@@ -1,10 +1,10 @@
 from custom_requester.custom_requestor import CustomRequester
-from enums.status_codes import StatusCodes
+from http import HTTPStatus
 
 
 class ProjectAPI(CustomRequester):
 
-    def create_project(self, project_data, expected_status=StatusCodes.SC_OK):
+    def create_project(self, project_data, expected_status=HTTPStatus.OK):
         return self.send_request("POST",
                                  "/app/rest/projects",
                                  data=project_data,
@@ -16,7 +16,7 @@ class ProjectAPI(CustomRequester):
     def delete_project(self, project_id):
         return self.send_request("DELETE",
                                  f"/app/rest/projects/id:{project_id}",
-                                 expected_status=StatusCodes.NO_CONTENT)
+                                 expected_status=HTTPStatus.NO_CONTENT)
 
     def clean_up_project(self, created_project_id):
         """
