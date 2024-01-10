@@ -1,7 +1,7 @@
 import logging
 import os
-from enums.status_codes import StatusCodes
 from enums.hosts import BASE_URL
+from http import HTTPStatus
 
 
 class CustomRequester:
@@ -12,7 +12,7 @@ class CustomRequester:
         self.session = session
         self.base_url = BASE_URL
 
-    def send_request(self, method, endpoint, data=None, expected_status=StatusCodes.SC_OK, need_logging=True):
+    def send_request(self, method, endpoint, data=None, expected_status=HTTPStatus.OK, need_logging=True):
         """
         Враппер для запросов. Позволяет прикручивать различную логику
 

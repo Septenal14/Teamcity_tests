@@ -1,7 +1,7 @@
 import pytest
 import allure
 from data.project_data import ProjectData
-from enums.status_codes import StatusCodes
+from http import HTTPStatus
 
 
 class TestProjectCreate:
@@ -44,7 +44,7 @@ class TestProjectCreate:
         with allure.step(f"Подготовка данных для отправки запроса '{desc}'"):
             project_invalid_data = project_invalid_id_data(id_value)
         with allure.step("Отправка запроса на создание проекта"):
-            resp = api_manager.project_api.create_project(project_invalid_data, expected_status=StatusCodes.INTERNAL)
+            resp = api_manager.project_api.create_project(project_invalid_data, expected_status=HTTPStatus.INTERNAL_SERVER_ERROR)
         with allure.step("Проверка ответа"):
             assert assert_cont in resp.text, "Response don't have expected message"
 
