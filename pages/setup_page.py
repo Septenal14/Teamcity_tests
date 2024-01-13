@@ -50,6 +50,7 @@ class SetUpUser:
     def __init__(self, page, actions):
         self.page = page
         self.actions = actions
+        # TODO page_url вынес бы как проперти @property и через setter/getter уже бы все делал. Сейчас куча повторяемого кода из-за этого
         self.page_url = f"{BASE_URL}/setupAdmin.html"
         self.username_locator = "#input_teamcityUsername"
         self.password_locator = "#password1"
@@ -68,6 +69,7 @@ class SetUpUser:
 class SetUpPage(BasePage):
     def __init__(self, page):
         super().__init__(page)
+        # TODO почему actions каждый раз инициализируешь на странице если его можно ?
         self.actions = Actions(page)
         self.first_start_window = FirstStartWindow(self.page, self.actions)
         self.loading = Loading(self.page, self.actions)
@@ -86,6 +88,7 @@ class SetUpPage(BasePage):
         self.agreement.continue_agreement()
         self.wait_for_url_change(self.agreement.page_url)
         self.wait_for_page_load()
+        # TODO всегда только один пользователь? а что если хочу другого?
         self.setup_user.fill_user_data("admin", "admin")
         self.setup_user.create_user()
         self.wait_for_url_change(self.setup_user.page_url)

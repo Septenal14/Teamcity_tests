@@ -29,6 +29,7 @@ class TestProjectCreate:
         with allure.step("Проверка наличия id созданного проекта в массиве"):
             assert self.created_project_id in project_ids, \
                 f"expected created project id={self.created_project_id} in project_ids, but not matched"
+        #TODO а если упадет выше, то проект не удалится)
         with allure.step("Удаляем созданный проект"):
             api_manager.project_api.clean_up_project(self.created_project_id)
 

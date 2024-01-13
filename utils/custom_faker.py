@@ -18,5 +18,5 @@ class DataGenerator:
     @staticmethod
     def fake_name():
         return faker_instance.word()
-
+    # TODO это точно надо?
     print(fake_project_id())

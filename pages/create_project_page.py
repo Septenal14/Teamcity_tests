@@ -59,6 +59,7 @@ class CreateFormContainerFragment:
 class ProjectCreationPage(BasePage):
     def __init__(self, page):
         super().__init__(page)
+        #TODO почему кортеж?
         self.page_url = (f'{BASE_URL}/admin/createObjectMenu.html?projectId=_Root&showMode=createProjectMenu&'
                          f'cameFromUrl=http%3A%2F%2Flocalhost%3A8111%2Ffavorite%2Fprojects')
         self.actions = Actions(page)

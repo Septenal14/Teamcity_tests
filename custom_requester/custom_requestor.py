@@ -28,7 +28,7 @@ class CustomRequester:
 
         if need_logging:
             self.log_request_and_response(response)
-
+        #TODO а зачем проверять тут? send_request - должен лишь отправить запрос, ему не важно, какой статус код придет
         if response.status_code != expected_status:
             raise ValueError(f"Unexpected status code: {response.status_code}")
 
@@ -52,6 +52,7 @@ class CustomRequester:
         """
         try:
             request = response.request
+            # TODO хранить надо не тут, этот код не имеет никакого отношения к логированию запроса. Лучше импортировать константы
             GREEN = '\033[32m'
             RED = '\033[31m'
             RESET = '\033[0m'

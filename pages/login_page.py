@@ -24,6 +24,7 @@ class LoginForm:
             self.actions.input_filtered_text(self.password, user_password)
 
     def click_login_button(self):
+        # TODO где то степы с большой буквы где то с маленькой
         with allure.step("клик по кнопке авторизации"):
             self.actions.click_button(self.login_button)
 
@@ -34,9 +35,11 @@ class LoginForm:
 
 class LoginPage(BasePage):
     def __init__(self, page):
+        # TODO подмена понятий. page != browser
         super().__init__(page)
         self.login_url = f'{BASE_URL}/login.html'
         self.actions = Actions(page)
+        # TODO зачем инициировать контент тут и передавать дальше, если он тут не используется?
         self.content = ContentFragment(page)
         self.login_form = LoginForm(self.content, self.actions)
 
@@ -47,6 +50,7 @@ class LoginPage(BasePage):
 
     def login(self):
         self.go_to_login_page()
+        # TODO всегда только один пользователь? а что если захочу зайти под другим?
         self.login_form.input_user_data("admin", "admin")
         self.login_form.click_login_button()
         self.wait_for_url_change(self.login_url)

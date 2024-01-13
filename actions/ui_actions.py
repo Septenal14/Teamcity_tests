@@ -2,6 +2,7 @@ import allure
 
 
 class Actions:
+    #TODO не понимаю смысла этого класса, честно говоря. Кажется что это должно быть в BasePage. Ну и подмена понятий browser/page
     def __init__(self, page):
         self.page = page
 
