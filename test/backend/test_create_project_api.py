@@ -16,14 +16,14 @@ class TestProjectCreate:
     @allure.title("Создание проекта")
     @allure.description("Создание проекта. Проверка успешности создания "
                         "и его нахождения в списке проектов")
-    def test_project_create(self, api_manager):
+    def test_project_create(self, system_admin_account, project_admin_account):
         with allure.step("Отправка запроса на создание проекта"):
-            create_project_response = api_manager.project_api.create_project(self.project_data).json()
+            create_project_response = system_admin_account.project_api.create_project(self.project_data).json()
         with allure.step("Проверка совпадения id проекта в теле ответа и в теле запроса"):
             assert create_project_response.get("id", {}) == self.created_project_id,\
                 f"expected project id= {self.created_project_id}, but '{create_project_response.get('id', {})}' given"
         with allure.step("Получение списка проектов"):
-            get_projects_response = api_manager.project_api.get_project().json()
+            get_projects_response = system_admin_account.project_api.get_project().json()
         with allure.step("Записываем в переменную список id проектов"):
             project_ids = [project.get('id', {}) for project in get_projects_response.get('project', [])]
         with allure.step("Проверка наличия id созданного проекта в массиве"):
@@ -31,7 +31,8 @@ class TestProjectCreate:
                 f"expected created project id={self.created_project_id} in project_ids, but not matched"
         #TODO а если упадет выше, то проект не удалится)
         with allure.step("Удаляем созданный проект"):
-            api_manager.project_api.clean_up_project(self.created_project_id)
+            system_admin_account.project_api.clean_up_project(self.created_project_id)
+            project_admin_account.project_api.create_project(self.project_data)
 
     @pytest.mark.parametrize("id_value, desc, assert_cont", [
         (1, "Первый символ не ascii", "starts with non-letter character"),
