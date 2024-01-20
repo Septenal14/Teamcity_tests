@@ -68,14 +68,25 @@ jobs:
 
     - name: Retrieve Super User Token
       run: |
-        if docker exec teamcity-server-instance cat /data/teamcity/logs/teamcity-server.log 2>&1 | grep 'Super user authentication token' > superuser_token.txt; then
-          token=$(cat superuser_token.txt | grep -oP 'Super user authentication token: \K[0-9]+')
-          echo "Super user token: $token"
-          echo "SUPER_USER_TOKEN=$token" >> $GITHUB_ENV
-        else
-          echo "Failed to retrieve super user token. Printing log for diagnosis:"
+        timeout=180 # 3 минуты максимальное время ожидания
+        while [ $timeout -gt 0 ]; do
+          if docker exec teamcity-server-instance cat /data/teamcity/logs/teamcity-server.log 2>&1 | grep -q 'Super user authentication token'; then
+            echo "Token found in logs, extracting..."
+            token=$(docker exec teamcity-server-instance cat /data/teamcity/logs/teamcity-server.log | grep -oP 'Super user authentication token: \K[0-9]+')
+            echo "Super user token: $token"
+            echo "SUPER_USER_TOKEN=$token" >> $GITHUB_ENV
+            break
+          else
+            echo "Token not found, waiting..."
+            sleep 10 # интервал проверки каждые 10 секунд
+            timeout=$((timeout-10))
+          fi
+        done
+        if [ $timeout -le 0 ]; then
+          echo "Failed to retrieve super user token within the timeout period."
           docker logs teamcity-server-instance
         fi
+      shell: /usr/bin/bash -e {0}
 
     - name: Run Tests
       run: |
