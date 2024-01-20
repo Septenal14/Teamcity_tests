@@ -11,12 +11,6 @@ jobs:
   run-tests:
     runs-on: ubuntu-latest
 
-    env:
-      BROWSER_WIDTH: ${{ secrets.BROWSER_WIDTH }}
-      HEADLESS: ${{ secrets.HEADLESS }}
-      BROWSER_HEIGHT: ${{ secrets.BROWSER_HEIGHT }}
-
-
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
