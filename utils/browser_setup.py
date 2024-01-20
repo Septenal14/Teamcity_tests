@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv
 
 
-load_dotenv()
+load_dotenv(override=True)
 browser_width = int(os.getenv('BROWSER_WIDTH', '800'))
 browser_height = int(os.getenv('BROWSER_HEIGHT', '600'))
 headless_mode = os.getenv('HEADLESS', 'True').lower() == 'true'
