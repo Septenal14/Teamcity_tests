@@ -14,4 +14,4 @@ class AuthAPI(CustomRequester):
         if not csrf_token:
             raise ValueError("CSRF token is missing or invalid")
         #TODO зачем распаковка когда можно через именнованные агрументы?
-        self._update_session_headers(**{"X-TC-CSRF-Token": csrf_token})
+        self._update_session_headers(**{"X_TC_CSRF_Token": csrf_token})

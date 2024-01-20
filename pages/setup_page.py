@@ -1,83 +1,79 @@
 import allure
 from pages.base_page import BasePage
-from enums.hosts import BASE_URL
-from actions.ui_actions import Actions
 
 
-class FirstStartWindow:
-    def __init__(self, page, actions):
+class FirstStartWindow(BasePage):
+    def __init__(self, page):
+        super().__init__(page)
         self.page = page
-        self.actions = actions
         self.window_locator = "#nestedPageContent"
         self.proceed_button_locator = "#proceedButton"
 
     def proceed_step(self):
         with allure.step("Нажатие кнопки proceed"):
-            self.actions.click_button(self.proceed_button_locator)
+            self.click_button(self.proceed_button_locator)
 
 
-class Loading:
-    def __init__(self, page, actions):
+class Loading(BasePage):
+    def __init__(self, page):
+        super().__init__(page)
         self.page = page
-        self.actions = actions
         self.loading_icon_locator = ".icon-refresh"
 
     def wait_loading(self, timeout_wait=1000, timeout_disappear=1000000):
         with allure.step("Ждем начала лоадинга"):
-            self.actions.wait_for_selector(self.loading_icon_locator, timeout_wait)
+            self.wait_for_selector(self.loading_icon_locator, timeout_wait)
         with allure.step("Ждем когда закончится лоадинг"):
-            self.actions.wait_disappear_selector(self.loading_icon_locator, timeout_disappear)
+            self.wait_disappear_selector(self.loading_icon_locator, timeout_disappear)
 
 
-class Agreement:
-    def __init__(self, page, actions):
+class Agreement(BasePage):
+    def __init__(self, page):
+        super().__init__(page)
         self.page = page
-        self.actions = actions
-        self.page_url = f"{BASE_URL}/showAgreement.html"
+        self.page_url = f"/showAgreement.html"
         self.accept_checkbox_locator = "input#accept"
         self.continue_button_locator = ".submitButton"
 
     def check_in_box(self):
         with allure.step("Активируем чекбокс"):
-            self.actions.activate_checkbox_if_not_active(self.accept_checkbox_locator)
+            self.activate_checkbox_if_not_active(self.accept_checkbox_locator)
 
     def continue_agreement(self):
         with allure.step("Принимаем Agreement"):
-            self.actions.click_button(self.continue_button_locator)
+            self.click_button(self.continue_button_locator)
 
 
-class SetUpUser:
-    def __init__(self, page, actions):
+class SetUpUser(BasePage):
+    def __init__(self, page):
+        super().__init__(page)
         self.page = page
-        self.actions = actions
         # TODO page_url вынес бы как проперти @property и через setter/getter уже бы все делал. Сейчас куча повторяемого кода из-за этого
-        self.page_url = f"{BASE_URL}/setupAdmin.html"
+        #  - resolved
         self.username_locator = "#input_teamcityUsername"
         self.password_locator = "#password1"
         self.confirm_password_locator = "#retypedPassword"
         self.create_button = ".loginButton"
 
     def fill_user_data(self, user_name, user_password):
-        self.actions.input_text(self.username_locator, user_name)
-        self.actions.input_text(self.password_locator, user_password)
-        self.actions.input_text(self.confirm_password_locator, user_password)
+        self.input_text(self.username_locator, user_name)
+        self.input_text(self.password_locator, user_password)
+        self.input_text(self.confirm_password_locator, user_password)
 
     def create_user(self):
-        self.actions.click_button(self.create_button)
+        self.click_button(self.create_button)
 
 
 class SetUpPage(BasePage):
     def __init__(self, page):
         super().__init__(page)
-        # TODO почему actions каждый раз инициализируешь на странице если его можно ?
-        self.actions = Actions(page)
-        self.first_start_window = FirstStartWindow(self.page, self.actions)
-        self.loading = Loading(self.page, self.actions)
-        self.agreement = Agreement(self.page, self.actions)
-        self.setup_user = SetUpUser(self.page, self.actions)
+        self.first_start_window = FirstStartWindow(self.page)
+        self.loading = Loading(self.page)
+        self.agreement = Agreement(self.page)
+        self.setup_user = SetUpUser(self.page)
 
-    def set_up(self):
-        self.navigate(BASE_URL)
+    def set_up(self, username="admin", password="admin"):
+        self.navigate(self.page_url)
         self.wait_for_page_load()
         self.first_start_window.proceed_step()
         self.loading.wait_loading()
@@ -89,6 +85,7 @@ class SetUpPage(BasePage):
         self.wait_for_url_change(self.agreement.page_url)
         self.wait_for_page_load()
         # TODO всегда только один пользователь? а что если хочу другого?
-        self.setup_user.fill_user_data("admin", "admin")
+        #  - это сетап, чтобы начать пользоваться сервисом. Создание юзеров/роелвая модель - в других тестах
+        self.setup_user.fill_user_data(username, password)
         self.setup_user.create_user()
         self.wait_for_url_change(self.setup_user.page_url)
