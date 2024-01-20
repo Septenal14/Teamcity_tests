@@ -49,29 +49,7 @@ jobs:
           echo "Port 8111 is not open."
         fi
 
-    - name: Retrieve Super User Token
-      run: |
-        timeout=180 # 3 минуты максимальное время ожидания
-        while [ $timeout -gt 0 ]; do
-          if docker exec teamcity-server-instance ls /data/teamcity/logs/teamcity-server.log; then
-            echo "Log file found, checking for token..."
-            if docker exec teamcity-server-instance cat /data/teamcity/logs/teamcity-server.log | grep -q 'Super user authentication token'; then
-              token=$(docker exec teamcity-server-instance cat /data/teamcity/logs/teamcity-server.log | grep -oP 'Super user authentication token: \K[0-9]+')
-              echo "Super user token: $token"
-              echo "SUPER_USER_TOKEN=$token" >> $GITHUB_ENV
-              break
-            fi
-          else
-            echo "Log file not found, waiting..."
-          fi
-          sleep 10 # интервал проверки каждые 10 секунд
-          timeout=$((timeout-10))
-        done
-        if [ $timeout -le 0 ]; then
-          echo "Failed to retrieve super user token within the timeout period."
-          docker logs teamcity-server-instance
-        fi
-      shell: /usr/bin/bash -e {0}
+    
 
     - name: Run TeamCity Agent Container
       run: |
@@ -87,6 +65,17 @@ jobs:
       run: |
         playwright install
         pytest -v test/frontend/test_set_up.py --alluredir=results
+
+    - name: Retrieve Super User Token
+      run: |
+        if docker exec teamcity-server-instance cat /data/teamcity/logs/teamcity-server.log 2>&1 | grep 'Super user authentication token' > superuser_token.txt; then
+          token=$(cat superuser_token.txt | grep -oP 'Super user authentication token: \K[0-9]+')
+          echo "Super user token: $token"
+          echo "SUPER_USER_TOKEN=$token" >> $GITHUB_ENV
+        else
+          echo "Failed to retrieve super user token. Printing log for diagnosis:"
+          docker logs teamcity-server-instance
+        fi
 
     - name: Run Tests
       run: |
