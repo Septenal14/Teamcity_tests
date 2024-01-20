@@ -38,7 +38,7 @@ class TestProjectCreate:
             with allure.step("Записываем в переменную список id проектов"):
                 project_ids = [project.get('id', {}) for project in get_projects_response.get('project', [])]
             with allure.step("Проверка наличия id созданного проекта в массиве"):
-                assert self.created_project_id + 1 in project_ids, \
+                assert self.created_project_id in project_ids, \
                     f"expected created project id={self.created_project_id} in project_ids, but not matched"
             # #TODO а если упадет выше, то проект не удалится)
             #  - resolved
@@ -51,11 +51,11 @@ class TestProjectCreate:
     @allure.feature("project")
     @allure.title("Создание проекта")
     @allure.description("Негативный кейс создания проекта с использованием параметризации")
-    def test_project_create_negative(self, api_manager, project_invalid_id_data, id_value, desc, assert_cont):
+    def test_project_create_negative(self, super_admin, project_invalid_id_data, id_value, desc, assert_cont):
         with allure.step(f"Подготовка данных для отправки запроса '{desc}'"):
             project_invalid_data = project_invalid_id_data(id_value)
         with allure.step("Отправка запроса на создание проекта"):
-            resp = api_manager.project_api.create_project(project_invalid_data, expected_status=HTTPStatus.INTERNAL_SERVER_ERROR)
+            resp = super_admin.api_object.project_api.create_project(project_invalid_data, expected_status=HTTPStatus.INTERNAL_SERVER_ERROR)
         with allure.step("Проверка ответа"):
             assert assert_cont in resp.text, "Response don't have expected message"
 
