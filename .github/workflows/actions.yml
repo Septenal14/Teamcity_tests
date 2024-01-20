@@ -10,10 +10,12 @@ on:
 jobs:
   run-tests:
     runs-on: ubuntu-latest
+
     env:
       BROWSER_WIDTH: ${{ secrets.BROWSER_WIDTH }}
       HEADLESS: ${{ secrets.HEADLESS }}
       BROWSER_HEIGHT: ${{ secrets.BROWSER_HEIGHT }}
+
 
     steps:
     - name: Checkout repository
@@ -73,12 +75,6 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y python3.10 python3-pip
         pip install -r requirements.txt
-
-    - name: Print HEADLESS value
-      run: |
-        echo $HEADLESS
-        echo $BROWSER_HEIGHT
-        echo $BROWSER_WIDTH
 
     - name: Run Set Up Test
       run: |
