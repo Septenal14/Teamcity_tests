@@ -36,6 +36,7 @@ class CreateFormContainerFragment(BasePage):
 
     def input_project_details(self, name, project_id, description):
         with allure.step("Ввод данных для создания проекта"):
+            self.wait_for_selector(self.project_name_selector, timeout=60000)
             self.input_text(self.project_name_selector, name)
             self.input_text(self.project_id_selector, project_id)
             self.input_text(self.project_description_selector, description)
@@ -64,4 +65,4 @@ class ProjectCreationPage(BasePage):
         self.menu_list_create.click_create_manually()
         self.create_form_container.input_project_details(name, project_id, description)
         self.create_form_container.click_create_button()
-        self.wait_for_page_load()
+        self.wait_for_url_change(self.page_url)
