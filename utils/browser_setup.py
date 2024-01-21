@@ -9,7 +9,7 @@ browser_height = int(os.getenv('BROWSER_HEIGHT', '600'))
 headless_env = os.getenv('HEADLESS', 'True')
 headless_mode = (headless_env == 'True' or headless_env != 'False' and bool(headless_env))
 
-
+ 
 class BrowserSetup:
     @classmethod
     def setup(cls):

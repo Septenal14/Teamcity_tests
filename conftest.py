@@ -5,7 +5,7 @@ from api.api_manager import ApiManager
 from data.project_data import ProjectData
 from utils.custom_faker import DataGenerator
 from utils.browser_setup import BrowserSetup
-from resources.user_creds import USERNAME, PASSWORD
+from resources.user_creds import SuperAdminCreds
 from data.user_data import UserData
 from enums.roles import Roles
 from enteties.user import User, Groups, Role
@@ -49,21 +49,22 @@ def user_session():
 @pytest.fixture
 def super_admin(user_session, super_admin_creds):
     new_session = user_session()
-    super_admin = User(USERNAME, PASSWORD, new_session, ["SUPER_ADMIN", "g"])
+    super_admin = User(SuperAdminCreds.USERNAME, SuperAdminCreds.PASSWORD, new_session, ["SUPER_ADMIN", "g"])
     super_admin.api_object.auth_api.authenticate(super_admin.creds)
     return super_admin
 
 
 @pytest.fixture
 def super_admin_creds():
-    return USERNAME, PASSWORD
+    return SuperAdminCreds.USERNAME, SuperAdminCreds.PASSWORD
 
 
 @pytest.fixture
 def user_create(user_session, super_admin):
     created_users_pool = []
+
     def _user_create(role):
-        user_data = UserData.create_user_data(role=Roles.PROJECT_ADMIN.value, scope="g")
+        user_data = UserData.create_user_data(role, scope="g")
         super_admin.api_object.user_api.create_user(user_data)
         new_session = user_session()
         created_users_pool.append(user_data['username'])
