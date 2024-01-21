@@ -3,6 +3,9 @@ from http import HTTPStatus
 
 
 class ProjectAPI(CustomRequester):
+    def __init__(self, session):
+        super().__init__()
+        self.session = session
 
     def create_project(self, project_data, expected_status=HTTPStatus.OK):
         return self.send_request("POST",

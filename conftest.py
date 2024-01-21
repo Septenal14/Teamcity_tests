@@ -5,10 +5,14 @@ from api.api_manager import ApiManager
 from data.project_data import ProjectData
 from utils.custom_faker import DataGenerator
 from utils.browser_setup import BrowserSetup
+from resources.user_creds import SuperAdminCreds
+from data.user_data import UserData
+from enums.roles import Roles
+from enteties.user import User, Groups, Role
 
 
 @pytest.fixture(scope="function")
-def browser():
+def browser_page():
     playwright, browser_instance, page = BrowserSetup.setup()
     yield page
     BrowserSetup.teardown(playwright, browser_instance)
@@ -16,10 +20,6 @@ def browser():
 
 @pytest.fixture(scope='class')
 def session():
-    """
-    Начинает сессию. Скоуп класса - одна сессия на весь тестовый класс
-    По окончанию тестов yield закроет сессию
-    """
     http_session = requests.Session()
     yield http_session
     http_session.close()
@@ -28,6 +28,52 @@ def session():
 @pytest.fixture(scope='class')
 def api_manager(session):
     return ApiManager(session)
+
+
+@pytest.fixture
+def user_session():
+    user_pool = []
+
+    def _create_user_session():
+        session = requests.Session()
+        user_session = ApiManager(session)
+        user_pool.append(user_session)
+        return user_session
+
+    yield _create_user_session
+
+    for user in user_pool:
+        user.close_session()
+
+
+@pytest.fixture
+def super_admin(user_session, super_admin_creds):
+    new_session = user_session()
+    super_admin = User(SuperAdminCreds.USERNAME, SuperAdminCreds.PASSWORD, new_session, ["SUPER_ADMIN", "g"])
+    super_admin.api_object.auth_api.authenticate(super_admin.creds)
+    return super_admin
+
+
+@pytest.fixture
+def super_admin_creds():
+    return SuperAdminCreds.USERNAME, SuperAdminCreds.PASSWORD
+
+
+@pytest.fixture
+def user_create(user_session, super_admin):
+    created_users_pool = []
+
+    def _user_create(role):
+        user_data = UserData.create_user_data(role, scope="g")
+        super_admin.api_object.user_api.create_user(user_data)
+        new_session = user_session()
+        created_users_pool.append(user_data['username'])
+        return User(user_data['username'], user_data['password'], new_session, [Role(role)])
+
+    yield _user_create
+
+    for username in created_users_pool:
+        super_admin.api_object.user_api.delete_user(username)
 
 
 @pytest.fixture

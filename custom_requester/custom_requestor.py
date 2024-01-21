@@ -2,14 +2,14 @@ import logging
 import os
 from enums.hosts import BASE_URL
 from http import HTTPStatus
+from enums.colors import GREEN, RED, RESET
 
 
 class CustomRequester:
     base_headers = dict({"Content-Type": "application/json", "Accept": "application/json"})
 
-    def __init__(self, session):
+    def __init__(self):
         self.logger = logging.getLogger(__name__)
-        self.session = session
         self.base_url = BASE_URL
 
     def send_request(self, method, endpoint, data=None, expected_status=HTTPStatus.OK, need_logging=True):
@@ -28,7 +28,7 @@ class CustomRequester:
 
         if need_logging:
             self.log_request_and_response(response)
-
+        #TODO а зачем проверять тут? send_request - должен лишь отправить запрос, ему не важно, какой статус код придет пока что не напрягает, удобно expected передавать в параметр. Как варинат сделать need_verify_status, но пока
         if response.status_code != expected_status:
             raise ValueError(f"Unexpected status code: {response.status_code}")
 
@@ -52,9 +52,8 @@ class CustomRequester:
         """
         try:
             request = response.request
-            GREEN = '\033[32m'
-            RED = '\033[31m'
-            RESET = '\033[0m'
+            # TODO хранить надо не тут, этот код не имеет никакого отношения к логированию запроса. Лучше импортировать константы
+            #  -resolved
             headers = " \\\n".join([f"-H '{header}: {value}'" for header, value in request.headers.items()])
             full_test_name = f"pytest {os.environ.get('PYTEST_CURRENT_TEST', '').replace(' (call)', '')}"
 
