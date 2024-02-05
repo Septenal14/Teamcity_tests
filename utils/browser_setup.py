@@ -14,10 +14,8 @@ class BrowserSetup:
     @classmethod
     def setup(cls):
         playwright = sync_playwright().start()
-        # TODO хардкод хедлесс? Такое лучше в окружении держать
         browser = playwright.chromium.launch(headless=headless_mode)
         page = browser.new_page()
-        # TODO хардкод разрешение? Такое лучше в окружении держать
         page.set_viewport_size({"width": browser_width, "height": browser_height})
         return playwright, browser, page
 

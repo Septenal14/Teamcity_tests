@@ -13,8 +13,11 @@ class ProjectAPI(CustomRequester):
                                  data=project_data,
                                  expected_status=expected_status)
 
-    def get_project(self):
+    def get_project_list(self):
         return self.send_request("GET", "/app/rest/projects")
+
+    def get_project_by_locator(self, locator):
+        return self.send_request("GET", f"/app/rest/projects/{locator}")
 
     def delete_project(self, project_id):
         return self.send_request("DELETE",
@@ -28,7 +31,7 @@ class ProjectAPI(CustomRequester):
         :param created_project_id: принимает на вход созданный id_проекта который нужно удалить
         """
         self.delete_project(created_project_id)
-        get_projects_response = self.get_project().json()
+        get_projects_response = self.get_project_list().json()
 
         project_ids = [project.get('id', {}) for project in get_projects_response.get('project', [])]
         assert created_project_id not in project_ids, \
