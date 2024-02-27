@@ -3,6 +3,7 @@ import allure
 from data.project_data import ProjectData
 from http import HTTPStatus
 from contextlib import contextmanager
+from data.project_data import ProjectResponseModel
 
 
 @contextmanager
@@ -20,28 +21,34 @@ class TestProjectCreate:
     @classmethod
     def setup_class(cls):
         cls.project_data = ProjectData.create_project_data()
-        cls.created_project_id = cls.project_data["id"]
+        cls.project_data_id = cls.project_data.id
 
     @allure.feature("project")
     @allure.title("Создание проекта")
     @allure.description("Создание проекта. Проверка успешности создания "
                         "и его нахождения в списке проектов")
     def test_project_create(self, super_admin, user_create):
-        with project_cleanup(super_admin, self.created_project_id):
+        with project_cleanup(super_admin, self.project_data_id):
             with allure.step("Отправка запроса на создание проекта"):
-                create_project_response = super_admin.api_object.project_api.create_project(self.project_data).json()
-            with allure.step("Проверка совпадения id проекта в теле ответа и в теле запроса"):
-                assert create_project_response.get("id", {}) == self.created_project_id,\
-                    f"expected project id= {self.created_project_id}, but '{create_project_response.get('id', {})}' given"
-            with allure.step("Получение списка проектов"):
-                get_projects_response = super_admin.api_object.project_api.get_project().json()
-            with allure.step("Записываем в переменную список id проектов"):
-                project_ids = [project.get('id', {}) for project in get_projects_response.get('project', [])]
-            with allure.step("Проверка наличия id созданного проекта в массиве"):
-                assert self.created_project_id in project_ids, \
-                    f"expected created project id={self.created_project_id} in project_ids, but not matched"
-            # #TODO а если упадет выше, то проект не удалится)
-            #  - resolved
+                response = super_admin.api_object.project_api.create_project(self.project_data.model_dump()).text
+            with allure.step("Проверка совпадения id проекта и родительского проекта в теле ответа и в теле запроса"):
+                project_response = ProjectResponseModel.model_validate_json(response)
+                assert project_response.id == self.project_data_id, \
+                    f"expected project id= {self.project_data_id}, but '{project_response.id}' given"
+                assert project_response.parentProjectId == self.project_data.parentProject["locator"], \
+                    (f"expected parent project id= {self.project_data.parentProject['locator']},"
+                     f" but '{project_response.parentProjectId}' given in response")
+            with allure.step("отправка запроса на получение информации о созданном проекте"):
+                response = super_admin.api_object.project_api.get_project_by_locator(self.project_data.name).text
+            with allure.step("проверка соответствия параметров созданного проекта с отправленными данными"):
+                created_project = ProjectResponseModel.model_validate_json(response)
+                assert created_project.id == self.project_data.id, \
+                    f"expected project id= {self.project_data_id}, but '{created_project.id}' given"
+                assert created_project.name == self.project_data.name, \
+                    f"expected project name= {self.project_data.name}, but '{created_project.name}' given"
+                assert project_response.parentProjectId == self.project_data.parentProject["locator"], \
+                    (f"expected parent project id= {self.project_data.parentProject['locator']},"
+                     f" but '{project_response.parentProjectId}' given in response")
 
     @pytest.mark.parametrize("id_value, desc, assert_cont", [
         (1, "Первый символ не ascii", "starts with non-letter character"),

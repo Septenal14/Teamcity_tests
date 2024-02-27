@@ -28,11 +28,8 @@ class LoginForm(BasePage):
 
 class LoginPage(BasePage):
     def __init__(self, page):
-        # TODO подмена понятий. page != browser
         super().__init__(page)
         self.page_url = '/login.html'
-        # TODO зачем инициировать контент тут и передавать дальше, если он тут не используется?
-        #  - resolved
         self.page = page
         self.login_form = LoginForm(page)
 
@@ -43,7 +40,6 @@ class LoginPage(BasePage):
 
     def login(self, user_name="admin",  user_password="admin"):
         self.go_to_login_page()
-        # TODO всегда только один пользователь? а что если захочу зайти под другим?
         self.login_form.input_user_data(user_name, user_password)
         self.login_form.click_login_button()
         self.wait_for_url_change(self.page_url)

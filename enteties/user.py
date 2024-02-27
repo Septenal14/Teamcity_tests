@@ -1,5 +1,3 @@
-from api.api_manager import ApiManager
-import requests
 from enums.roles import Roles
 
 

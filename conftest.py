@@ -7,8 +7,7 @@ from utils.custom_faker import DataGenerator
 from utils.browser_setup import BrowserSetup
 from resources.user_creds import SuperAdminCreds
 from data.user_data import UserData
-from enums.roles import Roles
-from enteties.user import User, Groups, Role
+from enteties.user import User, Role
 
 
 @pytest.fixture(scope="function")

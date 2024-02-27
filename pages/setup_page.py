@@ -48,8 +48,6 @@ class SetUpUser(BasePage):
     def __init__(self, page):
         super().__init__(page)
         self.page = page
-        # TODO page_url вынес бы как проперти @property и через setter/getter уже бы все делал. Сейчас куча повторяемого кода из-за этого
-        #  - resolved
         self.username_locator = "#input_teamcityUsername"
         self.password_locator = "#password1"
         self.confirm_password_locator = "#retypedPassword"
@@ -84,8 +82,6 @@ class SetUpPage(BasePage):
         self.agreement.continue_agreement()
         self.wait_for_url_change(self.agreement.page_url)
         self.wait_for_page_load()
-        # TODO всегда только один пользователь? а что если хочу другого?
-        #  - это сетап, чтобы начать пользоваться сервисом. Создание юзеров/роелвая модель - в других тестах
         self.setup_user.fill_user_data(username, password)
         self.setup_user.create_user()
         self.wait_for_url_change(self.setup_user.page_url)

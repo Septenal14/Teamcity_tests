@@ -18,3 +18,7 @@ class DataGenerator:
     @staticmethod
     def fake_name():
         return faker_instance.word()
+
+    @staticmethod
+    def fake_email():
+        return faker_instance.email()
