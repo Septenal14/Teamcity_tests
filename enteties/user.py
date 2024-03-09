@@ -1,4 +1,6 @@
 from enums.roles import Roles
+from typing import Any
+from api.api_manager import ApiManager
 
 
 class Role:
@@ -16,7 +18,7 @@ class Groups:
 
 
 class User:
-    def __init__(self, username: str, password: str, session: object, roles: list, **kwargs):
+    def __init__(self, username: str, password: str, session: ApiManager, roles: list, **kwargs: Any):
         self.username = username
         self.password = password
         self.email = None

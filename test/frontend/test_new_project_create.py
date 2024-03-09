@@ -15,4 +15,8 @@ def test_create_project(browser_page, random_name, random_project_id, super_admi
         project_creation_page.create_project(random_name, random_project_id, random_name)
     #TODO а если упадет выше, то проект не удалится)
     with allure.step("Удаление проекта"):
+        time.sleep(1)
         super_admin.api_object.project_api.clean_up_project(random_project_id)
+
+        project_creation_page.header.go_to_projects_throw_header_button()
+        time.sleep(2)
